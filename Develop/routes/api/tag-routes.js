@@ -3,7 +3,7 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
-//TROUBLESHOOT PRODUCT DATA INCLUSIONS
+//========= TROUBLESHOOT PRODUCT DATA INCLUSIONS
 
 router.get('/', async (req, res) => {
   // find all tags
@@ -103,8 +103,25 @@ router.put('/:id', (req, res) => {
   })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` value
+  try {
+    const singleTag = await Tag.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!singleTag) {
+      res.status(400).json( {message: "No tag found with this ID."});
+      return;
+    };
+
+    res.status(200).json(singleTag)
+    console.log("The tag has been successfully deleted.")
+  }catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
