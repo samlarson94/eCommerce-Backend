@@ -3,13 +3,19 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/products` endpoint
 
-// get all products --- TROUBLESHOOT ROUTE (SEQUALIZE EAGER LOADING ERROR)
+// get all products -- Include category and tag data
 router.get('/', async (req, res) => {
   // find all products
   try {
     const productData = await Product.findAll( {
-      include: [{model: Tag, through: ProductTag, as: 'product_tags'}]
-      //Add category data
+      attributes: ['id', 'product_name', 'price', 'stock'],
+      include: [{
+        model: Category,
+        attributes: ['category_name'],
+      },
+      {model: Tag, through: ProductTag,
+      attributes: ['tag_name'],
+    }]
     });
     console.log("Get Route Retrieved Successfully");
     res.status(200).json(productData);
@@ -19,12 +25,17 @@ router.get('/', async (req, res) => {
   }
 });
 
-// get one product
+// get one product - include category and tag data
 router.get('/:id', async (req, res) => {
   try {
     const singleProduct = await Product.findByPk(req.params.id, {
-      include: [{ model: Tag, through: ProductTag, as: 'product_tags'}]
-      // INCLUDE CATEGORY DATA
+      attributes: ['id', 'product_name', 'price', 'stock'],
+      include: [{ model: Tag, through: ProductTag,
+      attributes: ['tag_name'],
+    },{
+      model: Category,
+      attributes: ['category_name'],
+    }],
     });
 
     if (!singleProduct) {
