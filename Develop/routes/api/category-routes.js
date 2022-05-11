@@ -69,12 +69,12 @@ router.put('/:id', (req, res) => {
 })});
 
 //Delete existing ID Review this section
-const categoryToRemove = categoryIds
-.filter(({id}) => !req.body.id.includes(id))
-.map(({ id }) => id);
+// const categoryToRemove = categoryIds
+// .filter(({id}) => !req.body.id.includes(id))
+// .map(({ id }) => id);
 
-router.delete('/:id', (req, res) => {
-  // delete a category by its `id` value
-});
+// router.delete('/:id', (req, res) => {
+//   // delete a category by its `id` value
+// });
 
 module.exports = router;
