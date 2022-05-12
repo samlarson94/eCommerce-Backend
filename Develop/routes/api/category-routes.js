@@ -22,6 +22,9 @@ router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   try {
     const singleCategory = await Category.findByPk(req.params.id, {
+      include: [{model: Product, 
+      attributes: ['product_name', 'price', 'stock'],
+    }]
     });
 
     if (!singleCategory) {
@@ -58,23 +61,39 @@ router.post('/', async (req, res) => {
 });
 });
 
-// ===== WORK FROM HERE =======
-router.put('/:id', (req, res) => {
+
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
-  //Create new 
-  Category.update(req.body, {
-    where: {
-      id: req.params.id,
-    },
-})});
+  try {
+    const categoryInfo = await Category.update(req.body, {
+      where: {
+        id: req.params.id
+      }
+    });
+    if (!categoryInfo) {
+      res.status(404).json({message: 'No category with this id!'});
+      return;
+    }
+    res.status(200).json(categoryInfo);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
-//Delete existing ID Review this section
-// const categoryToRemove = categoryIds
-// .filter(({id}) => !req.body.id.includes(id))
-// .map(({ id }) => id);
+router.delete('/:id', async (req, res) => {
+  try {
+    const categoryInfo = await Category.destroy({
+      where: {id: req.params.id}
+    });
+    if (!categoryInfo) {
+      res.status(404).json({message: "No category found with this id!"});
+      return;
+    }
+    res.status(200).json(categoryInfo);
+  }catch (err) {
+    res.status(500).json(err);
+  }
+});
 
-// router.delete('/:id', (req, res) => {
-//   // delete a category by its `id` value
-// });
 
 module.exports = router;

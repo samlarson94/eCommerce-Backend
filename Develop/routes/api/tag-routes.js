@@ -48,13 +48,13 @@ router.post('/', async (req, res) => {
   // create a new tag
   // req.body should look like this...
   // {
-  //   "id":"2",
+  //   "id":2, *Must be unique*
   //   "tag_name":"pop music"
   // }
   try {
-    const tagData = await Tag.create(req.body);
+    const tagInfo = await Tag.create(req.body);
     console.log("Post sent successfully!")
-    res.status(200).json(tag);
+    res.status(200).json(tagInfo);
   }catch (err) {
     console.log(err);
     res.status(400).json(err);

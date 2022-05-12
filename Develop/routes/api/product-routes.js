@@ -139,7 +139,7 @@ try {
   };
 
   res.status(200).json(singleProduct)
-  console.log("The product has been deleted.")
+  console.log("The product has been successfully deleted.")
 }catch (err) {
 res.status(500).json(err);
 }
